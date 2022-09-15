@@ -260,7 +260,7 @@ class MainMenuState extends MusicBeatState
 		if (ClientPrefs.shake)
 			FlxG.camera.shake(0.001, 99999999999);
 
-		resetText = new FlxText(0, FlxG.height - 24, 0, "PRESS DELETE TO RESET PROGRESS", 12);
+		resetText = new FlxText(0, FlxG.height - 24, 0, "PRESS B TO RESET PROGRESS", 12);
 		resetText.scrollFactor.set();
 		resetText.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		resetText.x = (FlxG.width - resetText.width) - 12;
