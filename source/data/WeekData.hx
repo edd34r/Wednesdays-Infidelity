@@ -129,14 +129,12 @@ class WeekData
 
 		for (i in 0...directories.length)
 		{
-			var directory:String = directories[i] + 'weeks/';
-			if (FileSystem.exists(directory))
-			{
+			    var directory:String = directories[i] + 'weeks/';
 				var listOfWeeks:Array<String> = CoolUtil.coolTextFile(directory + 'weekList.txt');
 				for (daWeek in listOfWeeks)
 				{
 					var path:String = directory + daWeek + '.json';
-					if (sys.FileSystem.exists(path))
+					if (OpenFlAssets.exists(path))
 					{
 						addWeek(daWeek, path, directories[i], i, originalLength);
 					}
@@ -150,7 +148,6 @@ class WeekData
 						addWeek(file.substr(0, file.length - 5), path, directories[i], i, originalLength);
 					}
 				}
-			}
 		}
 	}
 

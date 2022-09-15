@@ -14,8 +14,11 @@ package data;
 #include <dwmapi.h>
 #include <winuser.h>
 ')
-#elseif linux
-@:headerCode("#include <stdio.h>")
+#elseif LinuxSystems
+@:headerCode('
+#include <stdio.h>
+#include <string.h>
+')
 #end
 class WindowsData
 {
@@ -26,7 +29,7 @@ class WindowsData
 
 		return (allocatedRAM / 1024);
 	")
-	#elseif linux
+	#elseif LinuxSystems
 	@:functionCode('
 		FILE *meminfo = fopen("/proc/meminfo", "r");
 
@@ -52,6 +55,31 @@ class WindowsData
 	{
 		return 0;
 	}
+	
+	/*@:functionCode('
+		FILE *cpuinfo = fopen("/proc/cpuinfo", "r");
+
+    	if(cpuinfo == NULL)
+			return 'dead';
+
+    	char line[256];
+    	while(fgets(line, sizeof(line), cpuinfo))
+    	{
+        	string cpu;
+        	if(sscanf(line, "Processor	: %d", &cpu) == 1)
+        	{
+            	fclose(cpuinfo);
+            	return cpu;
+        	}
+    	}
+
+    	fclose(cpuinfo);
+    	return 'dead';
+	')
+	public static function _getArchitecture()
+	{
+		return '';
+	}*/
 
 	#if windows
 	@:functionCode('
@@ -115,6 +143,10 @@ class WindowsData
 		return alpha;
 	}
 	#end
+}
+enum Architectures {
+	BIT32;
+	BIT64;
 }
 
 @:enum abstract WindowColorMode(Int)

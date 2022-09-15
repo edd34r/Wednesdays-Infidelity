@@ -45,6 +45,9 @@ class ClientPrefs
 	public static var doNotShowWarnings:Bool = false;
 	public static var hudStyle:String = "Box Funkin";
 	public static var nubMode:Bool = false;
+	public static var mechsInputVariants:Bool = true;
+	public static var gradientHitboxes:Bool = true;
+	public static var hitboxOpacity:Float = 0.3;
 
 	// Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx and Controls.hx
 	public static var keyBinds:Map<String, Array<FlxKey>> = [
@@ -115,6 +118,9 @@ class ClientPrefs
 		FlxG.save.data.doNotShowWarnings = doNotShowWarnings;
 		FlxG.save.data.hudStyle = hudStyle;
 		FlxG.save.data.nubMode = nubMode;
+		FlxG.save.data.mechsInputVariants = mechsInputVariants;
+		FlxG.save.data.gradientHitboxes = gradientHitboxes;
+		FlxG.save.data.hitboxOpacity = hitboxOpacity;
 
 		FlxG.save.flush();
 
@@ -293,6 +299,20 @@ class ClientPrefs
 		if (FlxG.save.data.hudStyle != null)
 		{
 			hudStyle = FlxG.save.data.hudStyle;
+		}
+		
+		if (FlxG.save.data.mechsInputVariants != null)
+		{
+			mechsInputVariants = FlxG.save.data.mechsInputVariants;
+		}
+		
+		if (FlxG.save.data.gradientHitboxes != null)
+		{
+			gradientHitboxes = FlxG.save.data.gradientHitboxes;
+		}
+		if (FlxG.save.data.hitboxOpacity != null)
+		{
+			hitboxOpacity = FlxG.save.data.hitboxOpacity;
 		}
 
 		var save:FlxSave = new FlxSave();

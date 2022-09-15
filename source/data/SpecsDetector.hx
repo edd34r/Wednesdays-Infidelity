@@ -12,7 +12,7 @@ import states.MusicBeatState;
 
 #if windows
 @:headerCode("#include <windows.h>")
-#elseif linux
+#elseif LinuxSystems
 @:headerCode("#include <stdio.h>")
 #end
 class SpecsDetector extends MusicBeatState
