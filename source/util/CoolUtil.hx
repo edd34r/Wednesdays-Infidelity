@@ -13,6 +13,7 @@ using StringTools;
 #if sys
 import sys.FileSystem;
 import sys.io.File;
+import openfl.utils.Assets;
 #else
 import openfl.utils.Assets;
 #end
@@ -56,8 +57,8 @@ class CoolUtil
 	{
 		var daList:Array<String> = [];
 		#if sys
-		if (FileSystem.exists(path))
-			daList = File.getContent(path).trim().split('\n');
+		if (Assets.exists(path))
+			daList = Assets.getText(path).trim().split('\n');
 		#else
 		if (Assets.exists(path))
 			daList = Assets.getText(path).trim().split('\n');

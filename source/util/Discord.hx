@@ -1,3 +1,4 @@
+#if !android
 package util;
 
 import Sys.sleep;
@@ -100,3 +101,4 @@ class DiscordClient
 	}
 	#end
 }
+#end
