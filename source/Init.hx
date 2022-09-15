@@ -11,7 +11,7 @@ import states.MusicBeatState;
 import states.menus.StoryMenuState;
 import states.menus.TitleState;
 import util.CoolUtil;
-import util.Discord.DiscordClient;
+//import util.Discord.DiscordClient;
 
 class Init extends FlxState
 {
@@ -25,7 +25,7 @@ class Init extends FlxState
 		super.create();
 
 		#if cpp
-		CppAPI.darkMode();
+		//CppAPI.darkMode();
 		#end
 
 		#if cpp

@@ -13,10 +13,11 @@ import openfl.Assets;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
-import openfl.display.StageScaleMode;
 import openfl.events.Event;
 import openfl.events.UncaughtErrorEvent;
+//import openfl.display.StageScaleMode;
 import states.menus.*;
+import sys.FileSystem;
 
 class Main extends Sprite
 {
@@ -35,6 +36,19 @@ class Main extends Sprite
 	public static var fullscreenKeys:Array<Null<FlxKey>>;
 
 	public static var fpsVar:FPS;
+	
+	static final videoFiles:Array<String> = [
+		"BadEnding",
+		"Good ending cinematica",
+		"good ending oh no",
+		"HellholeIntro",
+		"LIL DROPTOP - DOOK",
+		"ongfr",
+		"PENKARU GRIDDY",
+		"Portal",
+		"StoryStart",
+		"TransformUN",
+	];
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -46,6 +60,8 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+		
+		Generic.initCrashHandler();
 
 		if (stage != null)
 		{
@@ -66,7 +82,7 @@ class Main extends Sprite
 
 		setupGame();
 
-		addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, function(error:Dynamic)
+		/*addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, function(error:Dynamic)
 		{
 			@:using(haxe.CallStack)
 			var callStack:Array<Dynamic> = CallStack.callStack();
@@ -77,7 +93,7 @@ class Main extends Sprite
 			}
 
 			trace(error.message);
-		});
+		});*/
 
 		addEventListener(Event.ENTER_FRAME, update);
 	}
@@ -121,27 +137,40 @@ class Main extends Sprite
 			gameWidth = Math.ceil(stageWidth / zoom);
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
-
-		#if !debug
-		initialState = WarningState;
-		#end
+		
+		Generic.mode = ROOTDATA;
+		if (!FileSystem.exists(Generic.returnPath() + 'assets')) {
+			FileSystem.createDirectory(Generic.returnPath() + 'assets');
+		}
+		if (!FileSystem.exists(Generic.returnPath() + 'assets/videos')) {
+			FileSystem.createDirectory(Generic.returnPath() + 'assets/videos');
+		}
+        for (vid in videoFiles) {
+			Generic.copyContent(Paths._video(vid), Paths._video(vid));
+		}
 
 		addChild(new FlxGame(gameWidth, gameHeight, Init, zoom, framerate, framerate, skipSplash, startFullscreen));
 
-		#if !mobile
 		fpsVar = new FPS(10, 5, 0xFFFFFF);
 		addChild(fpsVar);
-		Lib.current.stage.align = "tl";
-		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
+		//Lib.current.stage.align = "tl";
 		if (fpsVar != null)
 		{
 			fpsVar.visible = false;
 		}
-		#end
 
 		#if html5
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
 		#end
+	}
+	public static function applyDarkShader() {
+		
+	}
+	public static function applyLightShader() {
+		
+	}
+	public static function setAlpha(alpha:Float) {
+		
 	}
 }
