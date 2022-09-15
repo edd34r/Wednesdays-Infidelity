@@ -24,6 +24,10 @@ import states.game.PlayState;
 import states.menus.*;
 import states.substates.MusicBeatSubstate;
 import util.CoolUtil;
+#if mobileC
+import flixel.FlxCamera;
+import ui.FlxVirtualPad;
+#end
 
 class PauseSubState extends MusicBeatSubstate
 {
@@ -32,6 +36,7 @@ class PauseSubState extends MusicBeatSubstate
 	var menuItems:Array<String> = [];
 	var menuItemsOG:Array<String> = [
 		'Resume',
+		'Skip Time',
 		'Restart Song',
 		'Toggle Practice Mode',
 		'Toggle Botplay',
@@ -45,6 +50,8 @@ class PauseSubState extends MusicBeatSubstate
 	var skipTimeText:FlxText;
 	var skipTimeTracker:Alphabet;
 	var curTime:Float = Math.max(0, Conductor.songPosition);
+	
+	var virtualpad:FlxVirtualPad;
 
 	// var botplayText:FlxText;
 	public static var songName:String = '';
@@ -153,6 +160,14 @@ class PauseSubState extends MusicBeatSubstate
 
 		regenMenu();
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		
+		virtualpad = new FlxVirtualPad(FULL, A);
+		virtualpad.alpha = 0.75;
+		var pcam = new FlxCamera();
+		FlxG.cameras.add(pcam);
+		pcam.bgColor.alpha = 0;
+		virtualpad.cameras = [pcam];
+		add(virtualpad);
 	}
 
 	var holdTime:Float = 0;
@@ -165,9 +180,9 @@ class PauseSubState extends MusicBeatSubstate
 		super.update(elapsed);
 		updateSkipTextStuff();
 
-		var upP = controls.UI_UP_P;
-		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
+		var upP = controls.UI_UP_P || virtualpad.buttonUp.justPressed;
+		var downP = controls.UI_DOWN_P || virtualpad.buttonDown.justPressed;
+		var accepted = controls.ACCEPT || virtualpad.buttonA.justPressed;
 
 		if (upP)
 		{
@@ -182,25 +197,25 @@ class PauseSubState extends MusicBeatSubstate
 		switch (daSelected)
 		{
 			case 'Skip Time':
-				if (controls.UI_LEFT_P)
+				if (virtualpad.buttonLeft.justPressed)
 				{
 					FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 					curTime -= 1000;
 					holdTime = 0;
 				}
-				if (controls.UI_RIGHT_P)
+				if (virtualpad.buttonRight.justPressed)
 				{
 					FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 					curTime += 1000;
 					holdTime = 0;
 				}
 
-				if (controls.UI_LEFT || controls.UI_RIGHT)
+				if (virtualpad.buttonLeft.pressed || virtualpad.buttonRight.pressed)
 				{
 					holdTime += elapsed;
 					if (holdTime > 0.5)
 					{
-						curTime += 45000 * elapsed * (controls.UI_LEFT ? -1 : 1);
+						curTime += 45000 * elapsed * (virtualpad.buttonLeft.pressed ? -1 : 1);
 					}
 
 					if (curTime >= FlxG.sound.music.length)

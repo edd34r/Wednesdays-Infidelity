@@ -12,6 +12,10 @@ import input.Controls;
 import openfl.Lib;
 import openfl.sensors.Accelerometer;
 import states.substates.MusicBeatSubstate;
+#if mobileC
+import flixel.FlxCamera;
+import ui.FlxVirtualPad;
+#end
 
 using StringTools;
 
@@ -25,6 +29,7 @@ class StoryProgress extends MusicBeatSubstate
 	var text:Alphabet;
 	var selectedsomething:Bool = false;
 	var canSelect:Bool = false;
+	var virtualpad:FlxVirtualPad;
 
 	public var finishedCallback:Void->Void;
 
@@ -72,11 +77,18 @@ class StoryProgress extends MusicBeatSubstate
 		noText.x += 250;
 		add(noText);
 		updateOptions();
+		virtualpad = new FlxVirtualPad(LEFT_RIGHT, A_B);
+		virtualpad.alpha = 0.75;
+		var pcam = new FlxCamera();
+		FlxG.cameras.add(pcam);
+		pcam.bgColor.alpha = 0;
+		virtualpad.cameras = [pcam];
+		add(virtualpad);
 	}
 
 	override function update(elapsed:Float)
 	{
-		if (startedSelect && !controls.ACCEPT)
+		if (startedSelect && !virtualpad.buttonA.justPressed)
 		{
 			startedSelect = false;
 			canSelect = true;
@@ -96,13 +108,13 @@ class StoryProgress extends MusicBeatSubstate
 
 		if (!selectedsomething && canSelect)
 		{
-			if (controls.UI_LEFT_P || controls.UI_RIGHT_P)
+			if (virtualpad.buttonLeft.justPressed || virtualpad.buttonRight.justPressed)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'), 1);
 				onYes = !onYes;
 				updateOptions();
 			}
-			if (controls.BACK)
+			if (virtualpad.buttonB.justPressed)
 			{
 				selectedsomething = true;
 				FlxG.sound.play(Paths.sound('cancelMenu'), 1);
@@ -110,7 +122,7 @@ class StoryProgress extends MusicBeatSubstate
 				{
 				});
 			}
-			else if (controls.ACCEPT)
+			else if (virtualpad.buttonA.justPressed)
 			{
 				selectedsomething = true;
 				if (onYes)
