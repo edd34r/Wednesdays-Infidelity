@@ -16,7 +16,9 @@
 
 	<window width="1280" height="720" fps="" background="#000000" hardware="true" vsync="false" />
 
-	<window orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
+
+	<window if="mobile" orientation="landscape" fullscreen="true" width="1280" height="720" resizable="false"/>
 
 	<!-- ___________________ WEDNESDAY INFEDATLITLY SETTINGS ____________________ -->
 
@@ -28,6 +30,10 @@
 	<!--<define name="PRIVATE_BUILD"/> -->
 
 	<define name="VIDEOS_ALLOWED" if="windows" unless="32bits"/>
+	
+	<define name="LinuxSystems" if="linux || android" />
+	
+	<define name="mobileC" if="mobile" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
@@ -37,7 +43,7 @@
 
 	<classpath name="source" />
 	
-	<define name="VIDEOS_ALLOWED" if="web || windows" unless="32bits"/>
+	<define name="VIDEOS_ALLOWED" if="web || windows || android" unless="32bits"/>
 
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3"  unless="web"/>
@@ -80,8 +86,9 @@
 	<haxelib name="flixel-ui" />
 	<haxelib name="hxp" />
 	<haxelib name="flxanimate" />
-	<haxelib name="discord_rpc"/>
+	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="hxCodec"/>
+	<haxelib name="extension-androidtools" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
@@ -90,8 +97,14 @@
 
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
+	
+	<haxedef name="HXCPP_GC_BIG_BLOCKS"/>
 
-	<error value="Targets besides desktop are not supported" unless="desktop" />
+    <haxedef name="HXCPP_CHECK_POINTER"/>  <!--makes null references cause errors-->
+    <haxedef name="HXCPP_STACK_LINE" />    <!--if you want line numbers-->
+    <haxedef name="HXCPP_STACK_TRACE"/>    <!--if you want stack traces-->
+
+	<error value="Targets besides desktop are not supported (except android)" unless="desktop || android" />
 
 	<haxedef name="no-deprecation-warnings" />
 
