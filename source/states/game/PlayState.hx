@@ -61,12 +61,14 @@ import states.substates.PauseSubState;
 import util.*;
 import util.CoolUtil;
 import util.Shaders;
+import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
 
 #if desktop
 import util.Discord.DiscordClient;
 #end
+import ui.Hitbox;
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -119,6 +121,8 @@ class PlayState extends MusicBeatState
 	public var DAD_Y:Float = 100;
 	public var GF_X:Float = 400;
 	public var GF_Y:Float = 130;
+	
+	public var _hitbox:Hitbox;
 
 	public var songSpeedTween:FlxTween;
 	public var songSpeed(default, set):Float = 1;
@@ -1242,6 +1246,14 @@ class PlayState extends MusicBeatState
 		weekMissesTxt.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		cutsceneText.cameras = [camOther];
+		
+		if (SONG.song.toLowerCase() == "unknown-suffering") {
+		    _hitbox = new Hitbox(DODGE);
+		} else {
+			_hitbox = new Hitbox(DEFAULT);
+		}
+		_hitbox.visible = false;
+		add(_hitbox);
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
@@ -1306,16 +1318,9 @@ class PlayState extends MusicBeatState
 				case 'last-day':
 					if (ClientPrefs.intensiveShaders)
 					{
-						try
-						{
 							vhs = new util.Shaders.VHSEffect();
 
 							addShaderToCamera('camGame', vhs);
-						}
-						catch (e)
-						{
-							trace("SHADER PROBLEM");
-						}
 					}
 
 				case 'unknown-suffering':
@@ -1363,11 +1368,11 @@ class PlayState extends MusicBeatState
 		#end
 		#end
 
-		if (!ClientPrefs.controllerMode)
+		/*if (!ClientPrefs.controllerMode)
 		{
 			FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
-		}
+		}*/
 
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000;
 
@@ -1497,6 +1502,8 @@ class PlayState extends MusicBeatState
 		{
 			return;
 		}
+		
+		_hitbox.visible = true;
 
 		inCutscene = false;
 
@@ -1895,7 +1902,7 @@ class PlayState extends MusicBeatState
 
 		var songName:String = Paths.formatToSongPath(SONG.song);
 		var file:String = Paths.json(songName + '/events');
-		#if sys
+		#if windows
 		if (FileSystem.exists(file))
 		{
 		#else
@@ -2354,7 +2361,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (doingDodge && canDodge && FlxG.keys.anyJustPressed(dodgeKeys) && !_onCoolDown && !cpuControlled && !dodging && !paused)
+		if (doingDodge && canDodge && (FlxG.keys.anyJustPressed(dodgeKeys) || _hitbox.buttonDodge.justPressed) && !_onCoolDown && !cpuControlled && !dodging && !paused)
 		{
 			_onCoolDown = true;
 			dodging = true;
@@ -3564,6 +3571,7 @@ class PlayState extends MusicBeatState
 		camZooming = false;
 		inCutscene = false;
 		updateTime = false;
+		_hitbox.visible = false;
 
 		deathCounter = 0;
 		seenCutscene = false;
@@ -3968,7 +3976,7 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	private function onKeyPress(event:KeyboardEvent):Void
+	/*private function onKeyPress(event:KeyboardEvent):Void
 	{
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(eventKey);
@@ -4061,7 +4069,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 		// trace('released: ' + controlArray);
-	}
+	}*/
 
 	private function getKeyFromEvent(key:FlxKey):Int
 	{
@@ -4085,10 +4093,10 @@ class PlayState extends MusicBeatState
 	private function keyShit():Void
 	{
 		// HOLDING
-		var up = controls.NOTE_UP;
-		var right = controls.NOTE_RIGHT;
-		var down = controls.NOTE_DOWN;
-		var left = controls.NOTE_LEFT;
+		var up = controls.UI_UP;
+		var right = controls.UI_RIGHT;
+		var down = controls.UI_DOWN;
+		var left = controls.UI_LEFT;
 		var controlHoldArray:Array<Bool> = [left, down, up, right];
 
 		// TO DO: Find a better way to handle controller inputs, this should work for now
@@ -4104,8 +4112,8 @@ class PlayState extends MusicBeatState
 			{
 				for (i in 0...controlArray.length)
 				{
-					if (controlArray[i])
-						onKeyPress(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, true, -1, keysArray[i][0]));
+					//if (controlArray[i])
+						//onKeyPress(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, true, -1, keysArray[i][0]));
 				}
 			}
 		}
@@ -4148,8 +4156,8 @@ class PlayState extends MusicBeatState
 			{
 				for (i in 0...controlArray.length)
 				{
-					if (controlArray[i])
-						onKeyRelease(new KeyboardEvent(KeyboardEvent.KEY_UP, true, true, -1, keysArray[i][0]));
+					//if (controlArray[i])
+						//onKeyRelease(new KeyboardEvent(KeyboardEvent.KEY_UP, true, true, -1, keysArray[i][0]));
 				}
 			}
 		}
@@ -4846,11 +4854,11 @@ class PlayState extends MusicBeatState
 
 	override function destroy()
 	{
-		if (!ClientPrefs.controllerMode)
+		/*if (!ClientPrefs.controllerMode)
 		{
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
-		}
+		}*/
 		if (script != null)
 		{
 			script.executeFunc("destroy");
@@ -5272,8 +5280,8 @@ class PlayState extends MusicBeatState
 
 		var hxdata:String = "";
 
-		if (FileSystem.exists(path))
-			hxdata = File.getContent(path);
+		if (OpenFlAssets.exists(path))
+			hxdata = OpenFlAssets.getText(path);
 
 		if (hxdata != "")
 		{
