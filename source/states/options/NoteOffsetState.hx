@@ -162,6 +162,10 @@ class NoteOffsetState extends MusicBeatState
 
 		Conductor.changeBPM(128.0);
 		FlxG.sound.playMusic(Paths.music('offsetSong'), 1, true);
+		
+		#if mobileC
+        addVirtualPad(FULL, A_B_X_Y_C_Z_7_D);
+        #end
 
 		super.create();
 	}
@@ -182,15 +186,15 @@ class NoteOffsetState extends MusicBeatState
 		if (onComboMenu)
 		{
 			var controlArray:Array<Bool> = [
-				FlxG.keys.justPressed.LEFT,
-				FlxG.keys.justPressed.RIGHT,
-				FlxG.keys.justPressed.UP,
-				FlxG.keys.justPressed.DOWN,
-
-				FlxG.keys.justPressed.A,
-				FlxG.keys.justPressed.D,
-				FlxG.keys.justPressed.W,
-				FlxG.keys.justPressed.S
+				_virtualpad.buttonLeft.justPressed,
+				_virtualpad.buttonRight.justPressed,
+				_virtualpad.buttonUp.justPressed,
+				_virtualpad.buttonDown.justPressed,
+			
+				_virtualpad.buttonY.justPressed,
+				_virtualpad.buttonX.justPressed,
+				_virtualpad.buttonZ.justPressed,
+				_virtualpad.button7.justPressed
 			];
 
 			if (controlArray.contains(true))
@@ -267,7 +271,7 @@ class NoteOffsetState extends MusicBeatState
 				}
 			}
 
-			if (controls.RESET)
+			if (_virtualpad.buttonC.justPressed)
 			{
 				for (i in 0...ClientPrefs.comboOffset.length)
 				{
@@ -278,26 +282,26 @@ class NoteOffsetState extends MusicBeatState
 		}
 		else
 		{
-			if (controls.UI_LEFT_P)
+			if (_virtualpad.buttonLeft.justPressed)
 			{
 				barPercent = Math.max(delayMin, Math.min(ClientPrefs.noteOffset - 1, delayMax));
 				updateNoteDelay();
 			}
-			else if (controls.UI_RIGHT_P)
+			else if (_virtualpad.buttonRight.justPressed)
 			{
 				barPercent = Math.max(delayMin, Math.min(ClientPrefs.noteOffset + 1, delayMax));
 				updateNoteDelay();
 			}
 
 			var mult:Int = 1;
-			if (controls.UI_LEFT || controls.UI_RIGHT)
+			if (_virtualpad.buttonLeft.pressed || _virtualpad.buttonRight.pressed)
 			{
 				holdTime += elapsed;
-				if (controls.UI_LEFT)
+				if(_virtualpad.buttonLeft.pressed)
 					mult = -1;
 			}
 
-			if (controls.UI_LEFT_R || controls.UI_RIGHT_R)
+			if (_virtualpad.buttonLeft.justReleased || _virtualpad.buttonRight.justReleased)
 				holdTime = 0;
 
 			if (holdTime > 0.5)
@@ -307,7 +311,7 @@ class NoteOffsetState extends MusicBeatState
 				updateNoteDelay();
 			}
 
-			if (controls.RESET)
+			if (_virtualpad.buttonC.justPressed)
 			{
 				holdTime = 0;
 				barPercent = 0;
@@ -315,13 +319,13 @@ class NoteOffsetState extends MusicBeatState
 			}
 		}
 
-		if (controls.ACCEPT)
+		if(_virtualpad.buttonA.justPressed)
 		{
 			onComboMenu = !onComboMenu;
 			updateMode();
 		}
 
-		if (controls.BACK)
+		if(_virtualpad.buttonB.justPressed)
 		{
 			if (zoomTween != null)
 				zoomTween.cancel();
