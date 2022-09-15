@@ -74,6 +74,9 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK];
+		#end
 		// DiscordClient.changePresence("In the Menus", null);
 
 		Main.fpsVar.visible = ClientPrefs.showFPS;

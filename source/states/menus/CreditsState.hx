@@ -65,6 +65,14 @@ class CreditsState extends MusicBeatState
 				'https://twitter.com/Jhaix3',
 				'e2d4ce'
 			],
+			["Porting"],
+			[
+			    'Sirox',
+			    'Sirox',
+			    'Ported this whole mod',
+			    'https://youtube.com/channel/UCqp6FttWJlp67vHT8n-_uKw',
+			    '000BFF'
+			],
 			[
 				'Nugget',
 				'Nugget',
@@ -302,6 +310,9 @@ class CreditsState extends MusicBeatState
 		bg.color = getCurrentBGColor();
 		intendedColor = bg.color;
 		changeSelection();
+		#if mobileC
+        addVirtualPad(UP_DOWN, A_B_C);
+        #end
 		super.create();
 	}
 
@@ -320,7 +331,7 @@ class CreditsState extends MusicBeatState
 			if (creditsStuff.length > 1)
 			{
 				var shiftMult:Int = 1;
-				if (FlxG.keys.pressed.SHIFT)
+				if (FlxG.keys.pressed.SHIFT || _virtualpad.buttonC.justPressed)
 					shiftMult = 3;
 
 				var upP = controls.UI_UP_P;

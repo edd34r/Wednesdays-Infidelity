@@ -76,6 +76,10 @@ class UnfinishedState extends MusicBeatState
 
 		warnText2.screenCenter();
 		warnText2.y += 80;
+		
+		#if mobileC
+        addVirtualPad(NONE, A);
+        #end
 
 		FlxTween.tween(FlxG.camera, {alpha: 1}, 1, {
 			onComplete: function(_:FlxTween)
@@ -89,7 +93,7 @@ class UnfinishedState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (canPress && (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.ENTER))
+		if (canPress && (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.ENTER || controls.ACCEPT))
 		{
 			canPress = false;
 

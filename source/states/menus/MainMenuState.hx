@@ -39,6 +39,7 @@ import states.options.OptionsState;
 import states.substates.ResetScoreSubState;
 import util.CoolUtil;
 import util.Shaders;
+import flash.system.System;
 
 using StringTools;
 
@@ -271,6 +272,16 @@ class MainMenuState extends MusicBeatState
 			FlxTween.color(resetText, 1, FlxColor.WHITE, FlxColor.YELLOW, {type: PINGPONG});
 
 		changeItem();
+		
+		#if mobileC
+        addVirtualPad(UP_DOWN, A_B);
+        #end
+        
+        Progression.badEnding = true;
+		Progression.goodEnding = true;
+		Progression.beatHell = true;
+		Progression.beatMainWeek = true;
+		Progression.save();
 
 		super.create();
 	}
@@ -364,7 +375,7 @@ class MainMenuState extends MusicBeatState
 			}
 			#end
 			#end
-			if (#if PRIVATE_BUILD true #else Progression.beatMainWeek #end && FlxG.keys.justPressed.DELETE)
+			if (#if PRIVATE_BUILD true #else Progression.beatMainWeek #end && (FlxG.keys.justPressed.DELETE || controls.BACK))
 			{
 				selectedSomethin = true;
 				openSubState(new ResetScoreSubState(function()
@@ -372,13 +383,13 @@ class MainMenuState extends MusicBeatState
 					selectedSomethin = false;
 				}, function()
 				{
-					#if cpp
+					#if windows
 					CppAPI._setWindowLayered();
 
 					var numTween:NumTween = FlxTween.num(1, 0, 1, {
 						onComplete: function(twn:FlxTween)
 						{
-							Sys.exit(0);
+							System.exit(0);
 						}
 					});
 
@@ -392,7 +403,7 @@ class MainMenuState extends MusicBeatState
 					FlxTween.tween(FlxG.camera, {alpha: 0}, 1, {
 						onComplete: function(twn:FlxTween)
 						{
-							Sys.exit(0);
+							System.exit(0);
 						}
 					});
 					#end
@@ -410,7 +421,7 @@ class MainMenuState extends MusicBeatState
 
 				Progression.save();
 
-				Sys.exit(0);
+				System.exit(0);
 			}
 			#end
 

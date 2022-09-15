@@ -134,6 +134,10 @@ class WarningState extends MusicBeatState
 		addOption(option);
 
 		genOptions();
+		
+		#if mobileC
+        addVirtualPad(UP_DOWN, A_B);
+        #end
 	}
 
 	function addOption(option:Option)
@@ -167,7 +171,7 @@ class WarningState extends MusicBeatState
 
 		var text:FlxText = new FlxText(560 + 700, 650, 700, "", 21);
 		text.setFormat("VCR OSD Mono", 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		text.applyMarkup("Press $SPACE$ to continue.", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.YELLOW), "$")]);
+		text.applyMarkup("Press $B$ to continue.", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.YELLOW), "$")]);
 		text.cameras = [camHUD];
 		add(text);
 
@@ -320,7 +324,7 @@ class WarningState extends MusicBeatState
 			if (controls.UI_DOWN_P)
 				changeSelection(1);
 
-			if (FlxG.keys.justPressed.ENTER)
+			if (FlxG.keys.justPressed.ENTER || controls.ACCEPT)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				curOption.setValue((curOption.getValue() == true) ? false : true);
@@ -328,7 +332,7 @@ class WarningState extends MusicBeatState
 				reloadCheckboxes();
 			}
 
-			if (FlxG.keys.justPressed.SPACE && canPressSpace)
+			if ((FlxG.keys.justPressed.SPACE || controls.BACK) && canPressSpace)
 			{
 				canMove = false;
 
