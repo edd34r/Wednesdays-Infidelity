@@ -45,6 +45,7 @@ jobs:
         run: |
           mkdir -p "%HAXELIB_ROOT%"
           haxelib setup "%HAXELIB_ROOT%"
+          haxelib install hxcpp  > /dev/null
           haxelib git lime https://github.com/Sirox228/lime --quiet
           haxelib install openfl 9.1.0 --quiet
           haxelib install flixel 4.11.0 --quiet
