@@ -17,7 +17,6 @@ package data;
 #elseif LinuxSystems
 @:headerCode('
 #include <stdio.h>
-#include <string.h>
 ')
 #end
 class WindowsData
@@ -55,31 +54,6 @@ class WindowsData
 	{
 		return 0;
 	}
-	
-	/*@:functionCode('
-		FILE *cpuinfo = fopen("/proc/cpuinfo", "r");
-
-    	if(cpuinfo == NULL)
-			return 'dead';
-
-    	char line[256];
-    	while(fgets(line, sizeof(line), cpuinfo))
-    	{
-        	string cpu;
-        	if(sscanf(line, "Processor	: %d", &cpu) == 1)
-        	{
-            	fclose(cpuinfo);
-            	return cpu;
-        	}
-    	}
-
-    	fclose(cpuinfo);
-    	return 'dead';
-	')
-	public static function _getArchitecture()
-	{
-		return '';
-	}*/
 
 	#if windows
 	@:functionCode('
