@@ -4093,20 +4093,28 @@ class PlayState extends MusicBeatState
 	private function keyShit():Void
 	{
 		// HOLDING
-		var up = controls.UI_UP;
-		var right = controls.UI_RIGHT;
-		var down = controls.UI_DOWN;
-		var left = controls.UI_LEFT;
+		var up = controls.NOTE_UP || _hitbox.buttonUp.pressed;
+		var right = controls.NOTE_RIGHT || _hitbox.buttonRight.pressed;
+		var down = controls.NOTE_DOWN || _hitbox.buttonDown.pressed;
+		var left = controls.NOTE_LEFT || _hitbox.buttonLeft.pressed;
+		var upP = controls.NOTE_UP_P || _hitbox.buttonUp.justPressed;
+		var rightP = controls.NOTE_RIGHT_P || _hitbox.buttonRight.justPressed;
+		var downP = controls.NOTE_DOWN_P || _hitbox.buttonDown.justPressed;
+		var leftP = controls.NOTE_LEFT_P || _hitbox.buttonLeft.justPressed;
+		var upR = controls.NOTE_UP_R || _hitbox.buttonUp.justReleased;
+		var rightR = controls.NOTE_RIGHT_R || _hitbox.buttonRight.justReleased;
+		var downR = controls.NOTE_DOWN_R || _hitbox.buttonDown.justReleased;
+		var leftR = controls.NOTE_LEFT_R || _hitbox.buttonLeft.justReleased;
 		var controlHoldArray:Array<Bool> = [left, down, up, right];
 
 		// TO DO: Find a better way to handle controller inputs, this should work for now
 		if (ClientPrefs.controllerMode)
 		{
 			var controlArray:Array<Bool> = [
-				controls.NOTE_LEFT_P,
-				controls.NOTE_DOWN_P,
-				controls.NOTE_UP_P,
-				controls.NOTE_RIGHT_P
+				leftP,
+				downP,
+				upP,
+				rightP
 			];
 			if (controlArray.contains(true))
 			{
@@ -4147,10 +4155,10 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.controllerMode)
 		{
 			var controlArray:Array<Bool> = [
-				controls.NOTE_LEFT_R,
-				controls.NOTE_DOWN_R,
-				controls.NOTE_UP_R,
-				controls.NOTE_RIGHT_R
+				leftR,
+				downR,
+				upR,
+				rightR
 			];
 			if (controlArray.contains(true))
 			{
