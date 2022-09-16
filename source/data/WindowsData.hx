@@ -1,5 +1,6 @@
 package data;
 
+using StringTools;
 #if windows
 @:buildXml('
 <target id="haxe">
@@ -17,6 +18,7 @@ package data;
 #elseif LinuxSystems
 @:headerCode('
 #include <stdio.h>
+#include <string.h>
 ')
 #end
 class WindowsData
@@ -54,6 +56,33 @@ class WindowsData
 	{
 		return 0;
 	}
+
+	
+	@:functionCode('
+		FILE *cpuinfo = fopen("/proc/cpuinfo", "r");
+    	char line[256];
+    	while(fgets(line, sizeof(line), cpuinfo))
+    	{
+        	int cpu;
+        	if(sscanf(line, "Processor	: %d", &cpu) == 1)
+        	{
+            	fclose(cpuinfo);
+            	return cpu;
+        	}
+    	}
+    	fclose(cpuinfo);
+	')
+	public static function _getArchitecture()
+	{
+		return 32;
+	}
+
+	public static function getArchitecture()
+	{
+		trace(_getArchitecture());
+		return _getArchitecture() != 32;
+	}
+	
 
 	#if windows
 	@:functionCode('
