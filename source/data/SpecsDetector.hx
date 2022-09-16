@@ -32,7 +32,7 @@ class SpecsDetector extends MusicBeatState
 	{
 		var ram:UInt64 = CppAPI.obtainRAM();
 
-		trace('\n--- SYSTEM INFO ---\nMEMORY AMOUNT: $ram);
+		trace('\n--- SYSTEM INFO ---\nMEMORY AMOUNT: $ram');
 
 		// cpu = false; testing methods
 		if (ram >= 4096)
