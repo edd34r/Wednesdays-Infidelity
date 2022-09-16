@@ -1318,9 +1318,9 @@ class PlayState extends MusicBeatState
 				case 'last-day':
 					if (ClientPrefs.intensiveShaders)
 					{
-							vhs = new util.Shaders.VHSEffect();
+							//vhs = new util.Shaders.VHSEffect();
 
-							addShaderToCamera('camGame', vhs);
+							//addShaderToCamera('camGame', vhs);
 					}
 
 				case 'unknown-suffering':
@@ -1329,17 +1329,17 @@ class PlayState extends MusicBeatState
 					addShaderToCamera("camHUD", chrom);
 					addShaderToCamera("camGame", chrom);
 				case 'wistfulness':
-					distort = new util.Shaders.DistortionEffect(1, 1);
+					//distort = new util.Shaders.DistortionEffect(1, 1);
 
-					distort.shader.working.value = [false];
+					//distort.shader.working.value = [false];
 
-					addShaderToCamera('camGame', distort);
+					//addShaderToCamera('camGame', distort);
 				case 'dejection':
-					distort = new util.Shaders.DistortionEffect(1, 1);
+					//distort = new util.Shaders.DistortionEffect(1, 1);
 
-					distort.shader.working.value = [false];
+					//distort.shader.working.value = [false];
 
-					addShaderToCamera('camGame', distort);
+					//addShaderToCamera('camGame', distort);
 			}
 		}
 
@@ -4122,6 +4122,76 @@ class PlayState extends MusicBeatState
 				{
 					//if (controlArray[i])
 						//onKeyPress(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, true, -1, keysArray[i][0]));
+						if (!cpuControlled && !paused && (controlArray[i] || ClientPrefs.controllerMode))
+							{
+								if (!boyfriend.stunned && generatedMusic && !endingSong)
+								{
+									// more accurate hit time for the ratings?
+									var lastTime:Float = Conductor.songPosition;
+									Conductor.songPosition = FlxG.sound.music.time;
+					
+									var canMiss:Bool = !ClientPrefs.ghostTapping;
+					
+									// heavily based on my own code LOL if it aint broke dont fix it
+									var pressNotes:Array<Note> = [];
+									// var notesDatas:Array<Int> = [];
+									var notesStopped:Bool = false;
+					
+									var sortedNotesList:Array<Note> = [];
+									notes.forEachAlive(function(daNote:Note)
+									{
+										if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit && !daNote.isSustainNote)
+										{
+											if (daNote.noteData == i)
+											{
+												sortedNotesList.push(daNote);
+												// notesDatas.push(daNote.noteData);
+											}
+											canMiss = true;
+										}
+									});
+									sortedNotesList.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+					
+									if (sortedNotesList.length > 0)
+									{
+										for (epicNote in sortedNotesList)
+										{
+											for (doubleNote in pressNotes)
+											{
+												if (Math.abs(doubleNote.strumTime - epicNote.strumTime) < 1)
+												{
+													doubleNote.kill();
+													notes.remove(doubleNote, true);
+													doubleNote.destroy();
+												}
+												else
+													notesStopped = true;
+											}
+					
+											// eee jack detection before was not super good
+											if (!notesStopped)
+											{
+												goodNoteHit(epicNote);
+												pressNotes.push(epicNote);
+											}
+										}
+									}
+									else if (canMiss)
+									{
+										noteMissPress(i);
+									}
+					
+									// more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
+									Conductor.songPosition = lastTime;
+								}
+					
+								var spr:StrumNote = playerStrums.members[i];
+								if (spr != null && spr.animation.curAnim.name != 'confirm')
+								{
+									spr.playAnim('pressed');
+									spr.resetAnim = 0;
+								}
+							}
 				}
 			}
 		}
@@ -4166,6 +4236,15 @@ class PlayState extends MusicBeatState
 				{
 					//if (controlArray[i])
 						//onKeyRelease(new KeyboardEvent(KeyboardEvent.KEY_UP, true, true, -1, keysArray[i][0]));
+						if (!cpuControlled && !paused)
+							{
+								var spr:StrumNote = playerStrums.members[i];
+								if (spr != null)
+								{
+									spr.playAnim('static');
+									spr.resetAnim = 0;
+								}
+							}
 				}
 			}
 		}
@@ -5042,21 +5121,21 @@ class PlayState extends MusicBeatState
 			switch (curStep)
 			{
 				case 536:
-					distort.shader.glitchModifier.value = [9];
+					//distort.shader.glitchModifier.value = [9];
 					// distort.shader.fullglitch.value = [2];
 
-					distort.shader.working.value = [true];
+				    //distort.shader.working.value = [true];
 
 				case 544:
-					distort.shader.glitchModifier.value = [1];
-					distort.shader.fullglitch.value = [1];
+					//distort.shader.glitchModifier.value = [1];
+					//distort.shader.fullglitch.value = [1];
 
 				case 670:
 					camGame.setFilters([]); // Remove shader
 
 					camGameShaders = [];
 
-					distort = null;
+					//distort = null;
 			}
 		}
 
