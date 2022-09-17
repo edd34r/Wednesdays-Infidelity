@@ -69,7 +69,7 @@ function onStepHit()
 				+ (!checkKey(getKey(dodgeKeys[0])) && !checkKey(getKey(dodgeKeys[1])) ? " " : "")
 				+ getKey(dodgeKeys[1]).toUpperCase();
 
-			PlayState.cutsceneText.text = "Your dodge keybinds are: %" + keysText + "%";
+			PlayState.cutsceneText.text = "Your dodge keybinds are: %" + 'DODGE HTIBOX' + "%";
 
 			PlayState.cutsceneText.applyMarkup("Your dodge keybinds are: $" + keysText + "$",
 				[new FlxTextFormatMarkerPair(new FlxTextFormat(fromRGB(255, 255, 0)), "$")]);
