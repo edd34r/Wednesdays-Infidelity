@@ -277,16 +277,17 @@ class MainMenuState extends MusicBeatState
         //addVirtualPad(UP_DOWN, A_B);
         #end
         
-        Progression.badEnding = true;
+        /*Progression.badEnding = true;
 		Progression.goodEnding = true;
 		Progression.beatHell = true;
 		Progression.beatMainWeek = true;
-		Progression.save();
+		Progression.save();*/
 
 		super.create();
 	}
 
 	var selectedSomethin:Bool = false;
+	var a:Bool = false;
 
 	override function update(elapsed:Float)
 	{
@@ -398,6 +399,18 @@ class MainMenuState extends MusicBeatState
 						#end
 						FlxTween.tween(FlxG.sound, {volume: 0}, 1);
 					}));
+			}
+			
+			a = false;
+			for (touch in FlxG.touches.list) {
+				if (touch.pressed && !a) {
+					a = true;
+					continue;
+				}
+				if (touch.pressed && a && !FlxG.stage.window.textInputEnabled) {
+					FlxG.stage.window.textInputEnabled = true;
+				    FlxG.stage.window.onTextInput.add(codeFunc);
+				}
 			}
 		
 			if (controls.UI_UP_P)
@@ -522,7 +535,83 @@ class MainMenuState extends MusicBeatState
 			}
 			#end
 
-			checkCombos();
+			//checkCombos();
+		}
+	}
+	
+	var codebuffer:String = '';
+	
+	function codeFunc(letter:String) {
+		codebuffer += letter.toUpperCase();
+		trace(codebuffer);
+		trace(letter.toUpperCase());
+		trace(codebuffer.contains("DOOK"));
+		if (codebuffer.contains("DOOK")) {
+			    selectedSomethin = true;
+				FlxG.stage.window.textInputEnabled = false;
+				codebuffer = '';
+
+				FlxTransitionableState.skipNextTransIn = true;
+				FlxTransitionableState.skipNextTransOut = true;
+
+				stopSound();
+
+				Lib.application.window.title = "All this money on me make me wanna poop, Pull up to yo' crib in that Bentley coupe, Hit the studio just to take a dookRun up to the streets with that fruit loop, Pull up to yo' block to yo' fuckin' trap".toUpperCase();
+				Lib.application.window.setIcon(Image.fromBitmapData(Paths.image("funni/MONEY").bitmap));
+
+				MusicBeatState.switchState(new CutsceneState("dook", false, function()
+				{
+					System.exit(0);
+				}));
+		} else if (codebuffer.contains("PENK")) {
+			    selectedSomethin = true;
+				FlxG.stage.window.textInputEnabled = false;
+				codebuffer = '';
+
+				FlxTransitionableState.skipNextTransIn = true;
+				FlxTransitionableState.skipNextTransOut = true;
+
+				stopSound();
+
+				Lib.application.window.title = [for (_ in 0...100) "GRIDDY"].join(" ");
+				Lib.application.window.setIcon(Image.fromBitmapData(Paths.image("funni/penkfunnyicon").bitmap));
+
+				MusicBeatState.switchState(new CutsceneState("penk", false, function()
+				{
+					System.exit(0);
+				}));
+		} else if (codebuffer.contains("MEESKA")) {
+			    selectedSomethin = true;
+				FlxG.stage.window.textInputEnabled = false;
+				codebuffer = '';
+
+				FlxTransitionableState.skipNextTransIn = true;
+
+				var songLowercase:String = Paths.formatToSongPath("Clubhouse");
+				// var poop:String = Highscore.formatSong(songLowercase, 2);
+
+				PlayState.SONG = Song.loadFromJson('clubhouse-hard', songLowercase);
+				PlayState.isStoryMode = false;
+				PlayState.storyDifficulty = 2;
+				PlayState.weekMisses = 0;
+
+				FlxG.sound.music.volume = 0;
+
+				LoadingState.loadAndSwitchState(new PlayState());
+		} else if (codebuffer.contains("COLE")) {
+			    selectedSomethin = true;
+				FlxG.stage.window.textInputEnabled = false;
+				codebuffer = '';
+
+				FlxTransitionableState.skipNextTransIn = true;
+				FlxTransitionableState.skipNextTransOut = true;
+
+				stopSound();
+
+				MusicBeatState.switchState(new CutsceneState("cole", false, function()
+				{
+					System.exit(0);
+				}));
 		}
 	}
 

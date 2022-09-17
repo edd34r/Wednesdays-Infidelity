@@ -244,6 +244,13 @@ class CreditsState extends MusicBeatState
 			    'https://youtube.com/channel/UCqp6FttWJlp67vHT8n-_uKw',
 			    '000BFF'
 			],
+			[
+			    'Dumpy',
+			    'spy',
+			    'Tester',
+			    'https://m.youtube.com/channel/UC06uotGEcdrePFau15BHxtQ',
+			    '636363'
+			],
 		];
 
 		for (i in pisspoop)

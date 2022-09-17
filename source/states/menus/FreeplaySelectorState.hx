@@ -115,13 +115,14 @@ class FreeplaySelectorState extends MusicBeatState
 		changeItem();
 		
 		#if mobileC
-        //addVirtualPad(UP_DOWN, A_B);
+        addVirtualPad(UP_DOWN, A_B);
         #end
 
 		super.create();
 	}
 
 	var selectedSomethin:Bool = false;
+	var a:Bool = true;
 
 	override function update(elapsed:Float)
 	{
@@ -138,12 +139,8 @@ class FreeplaySelectorState extends MusicBeatState
 
 		if (!selectedSomethin)
 		{
-			for (touch in FlxG.touches.list) {
-				if (touch.justPressed) {
-					menuItems.forEach(function(spr1:FlxSprite)
-					{
-						if (touch.overlaps(spr1) && touch.justPressed) {
-							if (curSelected == spr1.ID) { // (sirox) this is bad way to do this, but at least, it's working
+			/*for (touch in FlxG.touches.list) {
+						if (!touch.overlaps(hitbox) && touch.justPressed) {
 								selectedSomethin = true;
 								FlxG.sound.play(Paths.sound('confirmMenu'));
 
@@ -181,76 +178,75 @@ class FreeplaySelectorState extends MusicBeatState
 										}
 									}
 								});
-							} else {
-								FlxG.sound.play(Paths.sound('scrollMenu'));
-								lolchangeItem(spr1.ID);
-							}
+						} else if (touch.overlaps(hitbox) && touch.justPressed) {
+							FlxG.sound.play(Paths.sound('scrollMenu'));
+							changeItem(1);
 						}
-					});
-				}
-			}
+			}*/ // FUCK THIS, I'M TIRED
 			
-			if (FlxG.android.justReleased.BACK) {
+			/*if (FlxG.android.justReleased.BACK) {
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new MainMenuState());
-			}
-		
-			if (controls.UI_UP_P)
-			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(-1);
-			}
-			if (controls.BACK)
-			{
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				MusicBeatState.switchState(new MainMenuState());
-			}
-
-			if (controls.UI_DOWN_P)
-			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(1);
-			}
-
-			if (controls.ACCEPT)
-			{
-				selectedSomethin = true;
-				FlxG.sound.play(Paths.sound('confirmMenu'));
-
-				menuItems.forEach(function(spr:FlxSprite)
+			}*/
+			
+			for (touch in FlxG.touches.list) {
+				if (controls.UI_UP_P || (touch.overlaps(_virtualpad.buttonUp) && touch.justPressed))
 				{
-					if (curSelected != spr.ID)
-					{
-						FlxTween.tween(spr, {alpha: 0}, 0.4, {
-							ease: FlxEase.quadOut,
-							onComplete: function(twn:FlxTween)
-							{
-								spr.kill();
-							}
-						});
-					}
-					else
-					{
-						FlxTween.tween(FlxG.camera, {zoom: 2.1}, 2, {ease: FlxEase.expoInOut});
-						if (ClientPrefs.shake)
-							FlxG.camera.shake(0.008, 0.08);
+					FlxG.sound.play(Paths.sound('scrollMenu'));
+					changeItem(-1);
+				}
+				if (controls.BACK || (touch.overlaps(_virtualpad.buttonB) && touch.justPressed))
+				{
+					FlxG.sound.play(Paths.sound('cancelMenu'));
+					MusicBeatState.switchState(new MainMenuState());
+				}
 
-						if (ClientPrefs.flashing)
+				if (controls.UI_DOWN_P || (touch.overlaps(_virtualpad.buttonDown) && touch.justPressed))
+				{
+					FlxG.sound.play(Paths.sound('scrollMenu'));
+					changeItem(1);
+				}
+
+				if (controls.ACCEPT || (touch.overlaps(_virtualpad.buttonA) && touch.justPressed))
+				{
+					selectedSomethin = true;
+					FlxG.sound.play(Paths.sound('confirmMenu'));
+
+					menuItems.forEach(function(spr:FlxSprite)
+					{
+						if (curSelected != spr.ID)
 						{
-							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
-							{
-								MusicBeatState.switchState(new FreeplayState(weeks[curSelected]));
+							FlxTween.tween(spr, {alpha: 0}, 0.4, {
+								ease: FlxEase.quadOut,
+								onComplete: function(twn:FlxTween)
+								{
+									spr.kill();
+								}
 							});
 						}
 						else
 						{
-							new FlxTimer().start(1, function(tmr:FlxTimer)
+							FlxTween.tween(FlxG.camera, {zoom: 2.1}, 2, {ease: FlxEase.expoInOut});
+							if (ClientPrefs.shake)
+								FlxG.camera.shake(0.008, 0.08);
+
+							if (ClientPrefs.flashing)
 							{
-								MusicBeatState.switchState(new FreeplayState(weeks[curSelected]));
-							});
+								FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
+								{
+									MusicBeatState.switchState(new FreeplayState(weeks[curSelected]));
+								});
+							}
+							else
+							{
+								new FlxTimer().start(1, function(tmr:FlxTimer)
+								{
+									MusicBeatState.switchState(new FreeplayState(weeks[curSelected]));
+								});
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		}
 	}

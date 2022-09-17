@@ -257,7 +257,7 @@ class FreeplayState extends MusicBeatState
 		daStatic.animation.play('static');
 		
 		#if mobileC
-        addVirtualPad(FULL, A_B_C_Y);
+        addVirtualPad(UP_DOWN, A_B_C);
         #end
 
 		super.create();
