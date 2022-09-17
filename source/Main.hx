@@ -31,12 +31,6 @@ class Main extends Sprite
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
-	public static var canToggleFullScreen:Bool = false; // Will be set true in Init to make sure everything is ready
-
-	public static var fullscreenKeys:Array<Null<FlxKey>>;
-
-	public static var fpsVar:FPS;
-	
 	static final videoFiles:Array<String> = [
 		"BadEnding",
 		"Good ending cinematica",
@@ -49,6 +43,12 @@ class Main extends Sprite
 		"StoryStart",
 		"TransformUN",
 	];
+
+	public static var canToggleFullScreen:Bool = false; // Will be set true in Init to make sure everything is ready
+
+	public static var fullscreenKeys:Array<Null<FlxKey>>;
+
+	public static var fpsVar:FPS;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -145,6 +145,7 @@ class Main extends Sprite
 		if (!FileSystem.exists(Generic.returnPath() + 'assets/videos')) {
 			FileSystem.createDirectory(Generic.returnPath() + 'assets/videos');
 		}
+
         for (vid in videoFiles) {
 			Generic.copyContent(Paths._video(vid), Paths._video(vid));
 		}

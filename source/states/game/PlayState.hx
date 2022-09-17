@@ -68,6 +68,7 @@ using StringTools;
 #if desktop
 import util.Discord.DiscordClient;
 #end
+import flixel.input.actions.FlxActionInput;
 import ui.Hitbox;
 #if sys
 import sys.FileSystem;
@@ -666,7 +667,7 @@ class PlayState extends MusicBeatState
 			curCamera = stageCameras.get(curStage);
 
 		// Week Misses
-		weekMissesBar = new FlxSprite(800, ClientPrefs.downScroll ? 130 : 550).loadGraphic(Paths.image('weekMissesBar', 'shared'));
+		weekMissesBar = new FlxSprite(800, ClientPrefs.downScroll ? 100 : 520).loadGraphic(Paths.image('weekMissesBar', 'shared'));
 		weekMissesBar.antialiasing = ClientPrefs.globalAntialiasing;
 		weekMissesBar.scale.set(0.7, 0.7);
 		weekMissesBar.alpha = 0.8;
@@ -1247,11 +1248,21 @@ class PlayState extends MusicBeatState
 		botplayTxt.cameras = [camHUD];
 		cutsceneText.cameras = [camOther];
 		
-		if (SONG.song.toLowerCase() == "unknown-suffering") {
+		trace(SONG.song.toLowerCase());
+		if (SONG.song.toLowerCase() == "unknown suffering") {
 		    _hitbox = new Hitbox(DODGE);
+			trace('shit');
 		} else {
 			_hitbox = new Hitbox(DEFAULT);
 		}
+		controls.setHitBox(_hitbox);
+		var theshit = new FlxCamera();
+		FlxG.cameras.add(theshit);
+		theshit.bgColor.alpha = 0;
+		_hitbox.cameras = [theshit];
+
+		trackedinputs = controls.trackedinputs;
+		controls.trackedinputs = [];
 		_hitbox.visible = false;
 		add(_hitbox);
 
@@ -1318,9 +1329,9 @@ class PlayState extends MusicBeatState
 				case 'last-day':
 					if (ClientPrefs.intensiveShaders)
 					{
-							//vhs = new util.Shaders.VHSEffect();
+							vhs = new util.Shaders.VHSEffect();
 
-							//addShaderToCamera('camGame', vhs);
+							addShaderToCamera('camGame', vhs);
 					}
 
 				case 'unknown-suffering':
@@ -1329,17 +1340,17 @@ class PlayState extends MusicBeatState
 					addShaderToCamera("camHUD", chrom);
 					addShaderToCamera("camGame", chrom);
 				case 'wistfulness':
-					//distort = new util.Shaders.DistortionEffect(1, 1);
+					distort = new util.Shaders.DistortionEffect(1, 1);
 
-					//distort.shader.working.value = [false];
+					distort.shader.working.value = [false];
 
-					//addShaderToCamera('camGame', distort);
+					addShaderToCamera('camGame', distort);
 				case 'dejection':
-					//distort = new util.Shaders.DistortionEffect(1, 1);
+					distort = new util.Shaders.DistortionEffect(1, 1);
 
-					//distort.shader.working.value = [false];
+					distort.shader.working.value = [false];
 
-					//addShaderToCamera('camGame', distort);
+					addShaderToCamera('camGame', distort);
 			}
 		}
 
@@ -1368,11 +1379,11 @@ class PlayState extends MusicBeatState
 		#end
 		#end
 
-		/*if (!ClientPrefs.controllerMode)
+		if (!ClientPrefs.controllerMode)
 		{
 			FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
-		}*/
+		}
 
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000;
 
@@ -2512,7 +2523,7 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
-		if (controls.PAUSE && canPause && startedCountdown && !inCutscene)
+		if (controls.PAUSE #if android || FlxG.android.justReleased.BACK #end && canPause && startedCountdown && !inCutscene)
 		{
 			if (isStoryMode)
 				diablo();
@@ -3976,7 +3987,7 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	/*private function onKeyPress(event:KeyboardEvent):Void
+	private function onKeyPress(event:KeyboardEvent):Void
 	{
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(eventKey);
@@ -4069,7 +4080,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 		// trace('released: ' + controlArray);
-	}*/
+	}
 
 	private function getKeyFromEvent(key:FlxKey):Int
 	{
@@ -4093,36 +4104,27 @@ class PlayState extends MusicBeatState
 	private function keyShit():Void
 	{
 		// HOLDING
-		var up = controls.NOTE_UP || _hitbox.buttonUp.pressed;
-		var right = controls.NOTE_RIGHT || _hitbox.buttonRight.pressed;
-		var down = controls.NOTE_DOWN || _hitbox.buttonDown.pressed;
-		var left = controls.NOTE_LEFT || _hitbox.buttonLeft.pressed;
-		var upP = controls.NOTE_UP_P || _hitbox.buttonUp.justPressed;
-		var rightP = controls.NOTE_RIGHT_P || _hitbox.buttonRight.justPressed;
-		var downP = controls.NOTE_DOWN_P || _hitbox.buttonDown.justPressed;
-		var leftP = controls.NOTE_LEFT_P || _hitbox.buttonLeft.justPressed;
-		var upR = controls.NOTE_UP_R || _hitbox.buttonUp.justReleased;
-		var rightR = controls.NOTE_RIGHT_R || _hitbox.buttonRight.justReleased;
-		var downR = controls.NOTE_DOWN_R || _hitbox.buttonDown.justReleased;
-		var leftR = controls.NOTE_LEFT_R || _hitbox.buttonLeft.justReleased;
+	    var up = controls.NOTE_UP;
+		var right = controls.NOTE_RIGHT;
+		var down = controls.NOTE_DOWN;
+		var left = controls.NOTE_LEFT;
 		var controlHoldArray:Array<Bool> = [left, down, up, right];
 
 		// TO DO: Find a better way to handle controller inputs, this should work for now
 		if (ClientPrefs.controllerMode)
 		{
 			var controlArray:Array<Bool> = [
-				leftP,
-				downP,
-				upP,
-				rightP
+				controls.NOTE_LEFT_P,
+				controls.NOTE_DOWN_P,
+				controls.NOTE_UP_P,
+				controls.NOTE_RIGHT_P
 			];
 			if (controlArray.contains(true))
 			{
 				for (i in 0...controlArray.length)
 				{
-					//if (controlArray[i])
-						//onKeyPress(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, true, -1, keysArray[i][0]));
-						if (!cpuControlled && !paused && (controlArray[i] || ClientPrefs.controllerMode))
+					if (controlArray[i]) {
+						if (!cpuControlled && !paused)
 							{
 								if (!boyfriend.stunned && generatedMusic && !endingSong)
 								{
@@ -4192,6 +4194,7 @@ class PlayState extends MusicBeatState
 									spr.resetAnim = 0;
 								}
 							}
+					}
 				}
 			}
 		}
@@ -4225,17 +4228,16 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.controllerMode)
 		{
 			var controlArray:Array<Bool> = [
-				leftR,
-				downR,
-				upR,
-				rightR
+				controls.NOTE_LEFT_R,
+				controls.NOTE_DOWN_R,
+				controls.NOTE_UP_R,
+				controls.NOTE_RIGHT_R
 			];
 			if (controlArray.contains(true))
 			{
 				for (i in 0...controlArray.length)
 				{
-					//if (controlArray[i])
-						//onKeyRelease(new KeyboardEvent(KeyboardEvent.KEY_UP, true, true, -1, keysArray[i][0]));
+					if (controlArray[i]) {
 						if (!cpuControlled && !paused)
 							{
 								var spr:StrumNote = playerStrums.members[i];
@@ -4245,6 +4247,7 @@ class PlayState extends MusicBeatState
 									spr.resetAnim = 0;
 								}
 							}
+					}
 				}
 			}
 		}
@@ -4941,11 +4944,11 @@ class PlayState extends MusicBeatState
 
 	override function destroy()
 	{
-		/*if (!ClientPrefs.controllerMode)
+		if (!ClientPrefs.controllerMode)
 		{
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
-		}*/
+		}
 		if (script != null)
 		{
 			script.executeFunc("destroy");
@@ -5121,21 +5124,21 @@ class PlayState extends MusicBeatState
 			switch (curStep)
 			{
 				case 536:
-					//distort.shader.glitchModifier.value = [9];
-					// distort.shader.fullglitch.value = [2];
+					distort.shader.glitchModifier.value = [9];
+					distort.shader.fullglitch.value = [2];
 
-				    //distort.shader.working.value = [true];
+				    distort.shader.working.value = [true];
 
 				case 544:
-					//distort.shader.glitchModifier.value = [1];
-					//distort.shader.fullglitch.value = [1];
+					distort.shader.glitchModifier.value = [1];
+					distort.shader.fullglitch.value = [1];
 
 				case 670:
 					camGame.setFilters([]); // Remove shader
 
 					camGameShaders = [];
 
-					//distort = null;
+					distort = null;
 			}
 		}
 

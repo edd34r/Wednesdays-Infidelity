@@ -168,17 +168,18 @@ class Generic {
 	
 	public static function copyContent(copyPath:String, savePath:String)
 	{
-		try
-		{
+			trace(returnPath());
 			trace('saving dir: ' + returnPath() + savePath);
 			trace(copyPath);
-			if (!FileSystem.exists(returnPath() + savePath) && Assets.exists(copyPath))
-				File.saveBytes(returnPath() + savePath, Assets.getBytes(copyPath));
-		}
-		#if android
-		catch (e:Dynamic)
-		Hardware.toast("Error!\nClouldn't copy the file because:\n" + e, ToastType.LENGTH_LONG);
-		#end
+			var fileName:String = Paths.video("StoryStart");
+			trace(fileName);
+			trace('FileSystem.exists(fileName) = ' + FileSystem.exists(fileName));
+			trace('FileSystem.exists(returnPath() + savePath) = ' + FileSystem.exists(returnPath() + savePath));
+			trace('Assets.exists(copyPath) = ' + Assets.exists(copyPath));
+			if (!FileSystem.exists(returnPath() + savePath)/* && Assets.exists(copyPath)*/) {
+				File.saveBytes(returnPath() + savePath, Assets.getBytes('videos:' + copyPath));
+			    trace('saved');
+			}
 	}
 }
 
@@ -208,7 +209,7 @@ class PermsState extends FlxState {
 			if (callback != null) {
 				callback();
 			}
-        	//FlxG.switchState(new TitleState());
+        	FlxG.switchState(Type.createInstance(Main.initialState, []));
         });
         continuebutton.screenCenter(XY);
         continuebutton.x += 300;

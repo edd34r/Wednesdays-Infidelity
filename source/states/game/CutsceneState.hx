@@ -110,6 +110,9 @@ class CutsceneState extends MusicBeatState // PlayState is alreadly laggy enough
 		#if VIDEOS_ALLOWED
 		var foundFile:Bool = false;
 		var fileName:String = Paths.video(videoName);
+		
+		trace(fileName);
+		trace('FileSystem.exists(fileName) = ' + FileSystem.exists(fileName));
 
 		if (FileSystem.exists(fileName))
 		{

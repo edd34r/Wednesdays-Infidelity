@@ -17,7 +17,7 @@ class AttachedSprite extends FlxSprite
 	public var copyAlpha:Bool = true;
 	public var copyVisible:Bool = false;
 
-	public function new(?file:String = null, ?anim:String = null, ?library:String = null, ?loop:Bool = false)
+	public function new(?file:String = null, ?anim:String = null, ?library:String = null, ?loop:Bool = false, hell:Bool = false)
 	{
 		super();
 		if (anim != null)
@@ -28,7 +28,11 @@ class AttachedSprite extends FlxSprite
 		}
 		else if (file != null)
 		{
-			loadGraphic(Paths.image(file));
+			if (hell) {
+				loadGraphic(openfl.utils.Assets.getBitmapData(Paths.getPath(file + '.png', IMAGE)));
+			} else {
+				loadGraphic(Paths.image(file, library));
+			}
 		}
 		antialiasing = ClientPrefs.globalAntialiasing;
 		scrollFactor.set();

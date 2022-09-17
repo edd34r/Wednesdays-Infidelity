@@ -316,7 +316,7 @@ class Paths
 			localTrackedAssets.push(path);
 			return currentTrackedAssets.get(path);
 		}
-		trace('oh no its returning null NOOOO $path', currentLevel); // MORE INFO CAUSE IDK WHATS WRONG OTHER WISE
+		trace('oh no its returning null NOOOO $path'); // MORE INFO CAUSE IDK WHATS WRONG OTHER WISE
 		return null;
 	}
 

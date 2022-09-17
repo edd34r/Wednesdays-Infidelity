@@ -120,22 +120,25 @@ class OptionsState extends MusicBeatState
 		super.closeSubState();
 		ClientPrefs.saveSettings();
 		Lib.application.window.title = "Wednesday's Infidelity - Options";
+		#if mobileC
+        addVirtualPad(UP_DOWN, A_B);
+        #end
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-		if (controls.UI_UP_P)
+		if (controls.UI_UP_P || _virtualpad.buttonUp.justPressed)
 		{
 			changeSelection(-1);
 		}
-		if (controls.UI_DOWN_P)
+		if (controls.UI_DOWN_P || _virtualpad.buttonDown.justPressed)
 		{
 			changeSelection(1);
 		}
-
-		if (controls.BACK)
+		
+		if (controls.BACK || _virtualpad.buttonB.justPressed)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 
@@ -144,7 +147,7 @@ class OptionsState extends MusicBeatState
 			MusicBeatState.switchState(new MainMenuState());
 		}
 
-		if (controls.ACCEPT)
+		if (controls.ACCEPT || _virtualpad.buttonA.justPressed)
 		{
 			openSelectedSubstate(options[curSelected]);
 		}

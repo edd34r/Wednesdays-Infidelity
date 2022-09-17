@@ -115,7 +115,7 @@ class FreeplaySelectorState extends MusicBeatState
 		changeItem();
 		
 		#if mobileC
-        addVirtualPad(UP_DOWN, A_B);
+        //addVirtualPad(UP_DOWN, A_B);
         #end
 
 		super.create();
@@ -138,6 +138,60 @@ class FreeplaySelectorState extends MusicBeatState
 
 		if (!selectedSomethin)
 		{
+			for (touch in FlxG.touches.list) {
+				if (touch.justPressed) {
+					menuItems.forEach(function(spr1:FlxSprite)
+					{
+						if (touch.overlaps(spr1) && touch.justPressed) {
+							if (curSelected == spr1.ID) { // (sirox) this is bad way to do this, but at least, it's working
+								selectedSomethin = true;
+								FlxG.sound.play(Paths.sound('confirmMenu'));
+
+								menuItems.forEach(function(spr:FlxSprite)
+								{
+									if (curSelected != spr.ID)
+									{
+										FlxTween.tween(spr, {alpha: 0}, 0.4, {
+											ease: FlxEase.quadOut,
+											onComplete: function(twn:FlxTween)
+											{
+												spr.kill();
+											}
+										});
+									}
+									else
+									{
+										FlxTween.tween(FlxG.camera, {zoom: 2.1}, 2, {ease: FlxEase.expoInOut});
+										if (ClientPrefs.shake)
+											FlxG.camera.shake(0.008, 0.08);
+
+										if (ClientPrefs.flashing)
+										{
+											FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
+											{
+												MusicBeatState.switchState(new FreeplayState(weeks[curSelected]));
+											});
+										}
+										else
+										{
+											new FlxTimer().start(1, function(tmr:FlxTimer)
+											{
+												MusicBeatState.switchState(new FreeplayState(weeks[curSelected]));
+											});
+										}
+									}
+								});
+							}
+						}
+					});
+				}
+			}
+			
+			if (FlxG.android.justReleased.BACK) {
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				MusicBeatState.switchState(new MainMenuState());
+			}
+		
 			if (controls.UI_UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -201,6 +255,43 @@ class FreeplaySelectorState extends MusicBeatState
 	function changeItem(huh:Int = 0)
 	{
 		curSelected += huh;
+
+		if (curSelected >= menuItems.length)
+			curSelected = 0;
+		if (curSelected < 0)
+			curSelected = menuItems.length - 1;
+
+		menuItems.forEach(function(spr:FlxSprite)
+		{
+			var newShader:ColorSwap = new ColorSwap();
+			spr.shader = newShader.shader;
+			newShader.brightness = -0.8;
+			spr.setGraphicSize(Std.int(spr.width * 0.55));
+
+			if (spr.ID == curSelected)
+			{
+				spr.shader = null;
+				spr.setGraphicSize(Std.int(spr.width * 0.57));
+				if (ClientPrefs.flashing)
+				{
+					FlxG.camera.flash(FlxColor.BLACK, 0.2, null, true);
+				}
+				// FlxG.camera.flash(FlxColor.BLACK, 0.2);
+				if (spr.ID >= 3)
+				{
+					camFollow.setPosition(700, 1055);
+				}
+				else
+				{
+					camFollow.setPosition(700, 350);
+				}
+			}
+		});
+	}
+	
+	function lolchangeItem(huh:Int)
+	{
+		curSelected = huh;
 
 		if (curSelected >= menuItems.length)
 			curSelected = 0;

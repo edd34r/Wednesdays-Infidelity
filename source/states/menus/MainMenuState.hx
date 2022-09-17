@@ -260,7 +260,7 @@ class MainMenuState extends MusicBeatState
 		if (ClientPrefs.shake)
 			FlxG.camera.shake(0.001, 99999999999);
 
-		resetText = new FlxText(0, FlxG.height - 24, 0, "PRESS B TO RESET PROGRESS", 12);
+		resetText = new FlxText(0, FlxG.height - 24, 0, "PRESS ANDROID BACK KEY TO RESET PROGRESS", 12);
 		resetText.scrollFactor.set();
 		resetText.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		resetText.x = (FlxG.width - resetText.width) - 12;
@@ -274,7 +274,7 @@ class MainMenuState extends MusicBeatState
 		changeItem();
 		
 		#if mobileC
-        addVirtualPad(UP_DOWN, A_B);
+        //addVirtualPad(UP_DOWN, A_B);
         #end
         
         Progression.badEnding = true;
@@ -297,12 +297,109 @@ class MainMenuState extends MusicBeatState
 				FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 			}
 		}
-
+		
 		var lerpVal:Float = CoolUtil.boundTo(elapsed * 5.6, 0, 1);
 		camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 
 		if (!selectedSomethin)
 		{
+			for (touch in FlxG.touches.list) {
+				if (touch.justPressed) {
+					menuItems.forEach(function(spr:FlxSprite)
+					{
+						if (touch.overlaps(spr) && touch.justPressed) {
+							if (curSelected == spr.ID) { // (sirox) this is bad way to do this, but at least, it's working
+								if (optionShit[curSelected] == 'discord')
+								{
+									CoolUtil.browserLoad('https://discord.gg/KYGJvPkN8C');
+								}
+								else if (!Progression.beatMainWeek && optionShit[curSelected] == 'freeplay')
+								{
+									FlxG.sound.play(Paths.sound('lockedSound'));
+								}
+								else
+								{
+									selectedSomethin = true;
+									FlxG.sound.play(Paths.sound('confirmMenu'));
+									menuItems.forEach(function(lolspr:FlxSprite)
+									{
+										if (curSelected != lolspr.ID)
+										{
+											FlxTween.tween(lolspr, {alpha: 0}, 0.4, {
+												ease: FlxEase.quadOut,
+												onComplete: function(twn:FlxTween)
+												{
+													lolspr.kill();
+												}
+											});
+										}
+										else
+										{
+											FlxTween.tween(FlxG.camera, {zoom: 2.1}, 2, {ease: FlxEase.expoInOut});
+											if (ClientPrefs.shake)
+												FlxG.camera.shake(0.008, 0.08);
+
+											if (ClientPrefs.flashing)
+											{
+												FlxFlicker.flicker(lolspr, 1, 0.06, false, false, function(flick:FlxFlicker)
+												{
+													switchState();
+												});
+											}
+											else
+											{
+												new FlxTimer().start(1, function(tmr:FlxTimer)
+												{
+													switchState();
+												});
+											}
+										}
+									});
+								}
+							} else {
+								FlxG.sound.play(Paths.sound('scrollMenu'));
+								lolchangeItem(spr.ID);
+							}
+						}
+					});
+				}
+			}
+			
+			if (FlxG.android.justReleased.BACK) {
+				selectedSomethin = true;
+					openSubState(new ResetScoreSubState(function()
+					{
+						selectedSomethin = false;
+					}, function()
+					{
+						#if windows
+						CppAPI._setWindowLayered();
+
+						var numTween:NumTween = FlxTween.num(1, 0, 1, {
+							onComplete: function(twn:FlxTween)
+							{
+								System.exit(0);
+							}
+						});
+
+						numTween.onUpdate = function(twn:FlxTween)
+						{
+							#if windows
+							CppAPI.setWindowOppacity(numTween.value);
+							#end
+						}
+						#else
+						FlxTween.tween(FlxG.camera, {alpha: 0}, 1, {
+							onComplete: function(twn:FlxTween)
+							{
+								System.exit(0);
+							}
+						});
+						#end
+						FlxTween.tween(FlxG.sound, {volume: 0}, 1);
+					}));
+			}
+		
 			if (controls.UI_UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -452,6 +549,37 @@ class MainMenuState extends MusicBeatState
 	function changeItem(huh:Int = 0)
 	{
 		curSelected += huh;
+
+		if (curSelected >= menuItems.length)
+			curSelected = 0;
+		if (curSelected < 0)
+			curSelected = menuItems.length - 1;
+
+		menuItems.forEach(function(spr:FlxSprite)
+		{
+			spr.animation.play('idle');
+			spr.offset.y = 0;
+			spr.updateHitbox();
+
+			if (spr.ID == curSelected)
+			{
+				spr.animation.play('selected');
+				if (ClientPrefs.flashing)
+				{
+					FlxG.camera.flash(FlxColor.BLACK, 0.2, null, true);
+				}
+				// FlxG.camera.flash(FlxColor.BLACK, 0.2);
+				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y + (20 * curSelected));
+				spr.offset.x = 0.15 * (spr.frameWidth / 2 + 180);
+				spr.offset.y = 0.15 * spr.frameHeight;
+				FlxG.log.add(spr.frameWidth);
+			}
+		});
+	}
+	
+	function lolchangeItem(huh)
+	{
+		curSelected = huh;
 
 		if (curSelected >= menuItems.length)
 			curSelected = 0;

@@ -136,7 +136,7 @@ class TitleState extends MusicBeatState
 			addShader(distort);
 			addShader(chrom);
 
-			if (bloom != null)
+			if (ClientPrefs.shaders && ClientPrefs.intensiveShaders)
 				addShader(bloom);
 		}
 
@@ -296,24 +296,6 @@ class TitleState extends MusicBeatState
 		{
 			if (pressedEnter)
 			{
-				if (ClientPrefs.flashing)
-				{
-					if (bloom != null)
-					{
-						bloom.setDim(0.1);
-
-						var tween:NumTween = FlxTween.num(0.1, 1.8, 1);
-						tween.onUpdate = function(t:FlxTween)
-						{
-							bloom.setDim(tween.value);
-						}
-					}
-					else
-					{
-						FlxG.camera.flash();
-					}
-				}
-
 				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 
 				titleText.visible = false;
@@ -321,6 +303,18 @@ class TitleState extends MusicBeatState
 				titleTextxs.visible = false;
 
 				transitioning = true;
+				if (ClientPrefs.flashing && (!ClientPrefs.shaders || !ClientPrefs.intensiveShaders))
+				{
+					FlxG.camera.flash();
+				} else if (ClientPrefs.flashing && ClientPrefs.shaders && ClientPrefs.intensiveShaders) {
+					bloom.setDim(0.1);
+	
+					var tween:NumTween = FlxTween.num(0.1, 1.8, 1);
+					tween.onUpdate = function(t:FlxTween)
+					{
+						bloom.setDim(tween.value);
+					}
+				}
 
 				new FlxTimer().start(1.7, function(tmr:FlxTimer)
 				{

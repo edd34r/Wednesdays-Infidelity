@@ -60,18 +60,10 @@ class CreditsState extends MusicBeatState
 			["Wednesday's Infidelity Team"],
 			[
 				'Jhaix',
-				'Jhaix',
+				'jhaix',
 				'Director & Creator, Main Musician',
 				'https://twitter.com/Jhaix3',
 				'e2d4ce'
-			],
-			["Porting"],
-			[
-			    'Sirox',
-			    'Sirox',
-			    'Ported this whole mod',
-			    'https://youtube.com/channel/UCqp6FttWJlp67vHT8n-_uKw',
-			    '000BFF'
 			],
 			[
 				'Nugget',
@@ -109,7 +101,7 @@ class CreditsState extends MusicBeatState
 				"f5d482"
 			],
 			['Lunar', 'Lunar', 'Main Programmer', 'https://twitter.com/lunarcleint', '6757f3'],
-			['Jloor', 'Jloor', 'Programmer', 'https://twitter.com/GamerJloor', 'fdc4ad'],
+			['Jloor', 'jloor', 'Programmer', 'https://twitter.com/GamerJloor', 'fdc4ad'],
 			["Royal", 'Royal', 'Programmer', 'https://twitter.com/CoderRoyal', "e3baf7"],
 			[
 				"Sandi",
@@ -244,6 +236,14 @@ class CreditsState extends MusicBeatState
 				"f54e42"
 			],
 			['Kyz', 'Kyz', 'leaker', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', '362526'],
+			["Porting"],
+			[
+			    'Sirox',
+			    'Sirox',
+			    'Ported whole this mod',
+			    'https://youtube.com/channel/UCqp6FttWJlp67vHT8n-_uKw',
+			    '000BFF'
+			],
 		];
 
 		for (i in pisspoop)
@@ -276,7 +276,8 @@ class CreditsState extends MusicBeatState
 
 				if (creditsStuff[i][1] != "none")
 				{
-					var icon:AttachedSprite = new AttachedSprite('credits/' + creditsStuff[i][1]);
+					//trace(Paths.getPath('images/' + 'credits/' + creditsStuff[i][1] + '.png', IMAGE, 'shared'));
+					var icon:AttachedSprite = new AttachedSprite('images/credits/' + creditsStuff[i][1], null, false, true);
 					icon.xAdd = optionText.width + 10;
 					icon.sprTracker = optionText;
 
