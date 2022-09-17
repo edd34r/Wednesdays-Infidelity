@@ -60,7 +60,7 @@ function onStepHit()
 			PlayState.cutsceneText.visible = true;
 			PlayState.cutsceneText.size = 32;
 			PlayState.cutsceneText.fieldWidth = 1000;
-			PlayState.cutsceneText.x = 170;
+			PlayState.cutsceneText.x = 140;
 			PlayState.cutsceneText.y = 560;
 
 			var dodgeKeys = ClientPrefs.keyBinds.get('dodge');
@@ -69,9 +69,17 @@ function onStepHit()
 				+ (!checkKey(getKey(dodgeKeys[0])) && !checkKey(getKey(dodgeKeys[1])) ? " " : "")
 				+ getKey(dodgeKeys[1]).toUpperCase();
 
-			PlayState.cutsceneText.text = "Your dodge keybinds are: %" + 'DODGE HTIBOX' + "%";
+			var dg = '';
+			if (ClientPrefs.mechsInputVariants = true) {
+				dg = ' AT THE BOTTOM';
+			}
+			if (ClientPrefs.mechsInputVariants = false) {
+				dg = ' AT THE TOP';
+			}
 
-			PlayState.cutsceneText.applyMarkup("Your dodge keybinds are: $" + keysText + "$",
+			PlayState.cutsceneText.text = "Your dodge keybinds are: %" + 'DODGE HTIBOX' + dg + "%";
+
+			PlayState.cutsceneText.applyMarkup("Your dodge keybinds are: $" + 'DODGE HTIBOX' + dg + "$",
 				[new FlxTextFormatMarkerPair(new FlxTextFormat(fromRGB(255, 255, 0)), "$")]);
 
 			FlxTween.tween(PlayState.cutsceneText, {alpha: 1}, 1);
