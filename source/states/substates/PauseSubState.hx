@@ -36,7 +36,6 @@ class PauseSubState extends MusicBeatSubstate
 	var menuItems:Array<String> = [];
 	var menuItemsOG:Array<String> = [
 		'Resume',
-		'Skip Time',
 		'Restart Song',
 		'Toggle Practice Mode',
 		'Toggle Botplay',
@@ -161,7 +160,7 @@ class PauseSubState extends MusicBeatSubstate
 		regenMenu();
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 		
-		virtualpad = new FlxVirtualPad(FULL, A);
+		virtualpad = new FlxVirtualPad(UP_DOWN, A);
 		virtualpad.alpha = 0.75;
 		var pcam = new FlxCamera();
 		FlxG.cameras.add(pcam);
