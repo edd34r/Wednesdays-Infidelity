@@ -69,17 +69,9 @@ function onStepHit()
 				+ (!checkKey(getKey(dodgeKeys[0])) && !checkKey(getKey(dodgeKeys[1])) ? " " : "")
 				+ getKey(dodgeKeys[1]).toUpperCase();
 
-			var dg = '';
-			if (ClientPrefs.mechsInputVariants = true) {
-				dg = ' AT THE BOTTOM';
-			}
-			if (ClientPrefs.mechsInputVariants = false) {
-				dg = ' AT THE TOP';
-			}
+			PlayState.cutsceneText.text = "Your dodge keybinds are: %" + 'DODGE HITBOX' + "%";
 
-			PlayState.cutsceneText.text = "Your dodge keybinds are: %" + 'DODGE HTIBOX' + dg + "%";
-
-			PlayState.cutsceneText.applyMarkup("Your dodge keybinds are: $" + 'DODGE HTIBOX' + dg + "$",
+			PlayState.cutsceneText.applyMarkup("Your dodge keybinds are: $" + 'DODGE HITBOX' + "$",
 				[new FlxTextFormatMarkerPair(new FlxTextFormat(fromRGB(255, 255, 0)), "$")]);
 
 			FlxTween.tween(PlayState.cutsceneText, {alpha: 1}, 1);
