@@ -3,7 +3,7 @@
 name: Build
 
 # Controls when the workflow will run
-on: []
+on: [workflow_dispatch]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -55,18 +55,28 @@ jobs:
           haxelib install hscript --quiet
           haxelib git hxCodec https://github.com/polybiusproxy/hxcodec
           haxelib git extension-androidtools https://github.com/majigsaw77/extension-androidtools
-          haxelib run lime config ANDROID_SDK $ANDROID_SDK_ROOT
-          haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_ROOT
+          haxelib list
+
+      - name: Create Version Tag
+        run: echo "${{github.run_id}}" > VERSION
+
+      - name: Setup Lime
+        run: |
+          haxelib run lime setup -alias -y
+          haxelib run lime config ANDROID_SDK $ANDROID_HOME
+          haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_HOME
           haxelib run lime config JAVA_HOME $JAVA_HOME
           haxelib run lime config ANDROID_SETUP true
           haxelib set lime 7.9.0
           haxelib set openfl 9.1.0
+          haxelib set lime 7.9.0
+          haxelib set openfl 9.1.0
           haxelib set flxanimate 1.2.0
-          haxelib list
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
           
       - name: Build Log
         run: |
-          haxelib run lime setup android
           haxelib run lime build android -release
           
       - uses: actions/upload-artifact@v2
