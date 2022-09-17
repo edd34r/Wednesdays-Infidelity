@@ -45,7 +45,7 @@ jobs:
         run: |
           mkdir -p "%HAXELIB_ROOT%"
           haxelib setup "%HAXELIB_ROOT%"
-          haxelib install hxcpp  > /dev/null
+          haxelib install hxcpp > /dev/null
           haxelib install lime 7.9.0
           haxelib install openfl 9.1.0
           haxelib install flixel 4.11.0
