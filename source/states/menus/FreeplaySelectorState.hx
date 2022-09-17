@@ -181,6 +181,9 @@ class FreeplaySelectorState extends MusicBeatState
 										}
 									}
 								});
+							} else {
+								FlxG.sound.play(Paths.sound('scrollMenu'));
+								lolchangeItem(spr1.ID);
 							}
 						}
 					});

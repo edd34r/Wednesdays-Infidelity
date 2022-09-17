@@ -71,6 +71,7 @@ class TitleState extends MusicBeatState
 
 	var spiral:SpiralSpin;
 	var spiralbg:FlxSprite;
+	var shit:Bool = false;
 
 	override public function create():Void
 	{
@@ -88,6 +89,8 @@ class TitleState extends MusicBeatState
 		Lib.application.window.title = "Wednesday's Infidelity - Title";
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
+
+		shit = false;
 
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
@@ -294,7 +297,7 @@ class TitleState extends MusicBeatState
 
 		if (!transitioning && skippedIntro)
 		{
-			if (pressedEnter)
+			if (pressedEnter && shit)
 			{
 				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 
@@ -507,7 +510,12 @@ class TitleState extends MusicBeatState
 			FlxG.camera.zoom = 1.2;
 
 			FlxG.sound.music.time = 15800;
-			FlxTween.tween(FlxG.camera, {zoom: 1}, 1.8, {ease: FlxEase.circOut});
+			FlxTween.tween(FlxG.camera, {zoom: 1}, 1.8, {ease: FlxEase.circOut, onComplete: function(twn:FlxTween) {
+				new FlxTimer().start(1, function(tmr:FlxTimer)
+					{
+				    	shit = true;
+					});
+			}});
 
 			remove(credGroup);
 			skippedIntro = true;
