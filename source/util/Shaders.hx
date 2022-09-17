@@ -463,9 +463,9 @@ class VHSShader extends FlxShader // i HATE shaders xd -lunar https://www.shader
 		vec4 video = getVideo(uv);
 		float x =  0.;
 
-		video.r = getVideo(vec2(x+uv.x+(0.001/1.),uv.y+(0.001/2.)));
-		  video.g = getVideo(vec2(x+uv.x+(0.000/1.),uv.y-(0.002/2.)));
-		  video.b = getVideo(vec2(x+uv.x-(0.002/1.),uv.y+(0.000/2.)));
+		video.r = getVideo(vec2(x+uv.x+(0.001/1.),uv.y+(0.001/2.))).r;
+		video.g = getVideo(vec2(x+uv.x+(0.000/1.),uv.y-(0.002/2.))).g;
+		video.b = getVideo(vec2(x+uv.x-(0.002/1.),uv.y+(0.000/2.))).b;
 		
 		float vigAmt = 3.+.3*sin(iTime + 5.*cos(iTime*5.));
 		float vignette = (1.-vigAmt*(uv.y-.5)*(uv.y-.5))*(1.-vigAmt*(uv.x-.5)*(uv.x-.5));
