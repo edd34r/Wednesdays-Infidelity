@@ -40,7 +40,7 @@ class SpecsDetector extends MusicBeatState
 		else
 		{
 			return messageBox("Wednesday's Infidelity",
-				"Your PC does not meet the requirements Wednesday's Infidelity has.\nWhile you can still play the mod, you may experience framedrops and/or lag spikes.\n\nDo you want to play anyway?");
+				"Your phone does not meet the requirements Wednesday's Infidelity has.\nWhile you can still play the mod, you may experience framedrops and/or lag spikes.\n\nDo you want to play anyway?");
 		}
 
 		return true;
