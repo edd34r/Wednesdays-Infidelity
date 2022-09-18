@@ -41,8 +41,6 @@ class Hitbox extends FlxSpriteGroup
         /*if (widghtScreen == null)
             widghtScreen = FlxG.width;*/
 
-        sizex = 320;
-
         final offsetFir:Int = (FlxG.save.data.mechsInputVariants ? Std.int(FlxG.height / 4) * 3 : 0);
 		final offsetSec:Int = (FlxG.save.data.mechsInputVariants ? 0 : Std.int(FlxG.height / 4));
 		
@@ -52,15 +50,15 @@ class Hitbox extends FlxSpriteGroup
         switch (mode) {
         	case DEFAULT:
                 hitbox.add(add(buttonLeft = createhitbox(0, 0xFF00FF)));
-                hitbox.add(add(buttonDown = createhitbox(sizex, 0x00FFFF)));
-                hitbox.add(add(buttonUp = createhitbox(sizex * 2, 0x00FF00)));
-                hitbox.add(add(buttonRight = createhitbox(sizex * 3, 0xFF0000)));
+                hitbox.add(add(buttonDown = createhitbox(Std.int(FlxG.width / 4), 0x00FFFF)));
+                hitbox.add(add(buttonUp = createhitbox(Std.int(FlxG.width / 4) * 2, 0x00FF00)));
+                hitbox.add(add(buttonRight = createhitbox(Std.int(FlxG.width / 4) * 3, 0xFF0000)));
             case DODGE:
-                hitbox.add(add(buttonLeft = createhitbox(0, 0xFF00FF, offsetSec, sizex, 540)));
-                hitbox.add(add(buttonDown = createhitbox(sizex, 0x00FFFF, offsetSec, sizex, 540)));
-                hitbox.add(add(buttonUp = createhitbox(sizex * 2, 0x00FF00, offsetSec, sizex, 540)));
-                hitbox.add(add(buttonRight = createhitbox(sizex * 3, 0xFF0000, offsetSec, sizex, 540)));
-                hitbox.add(add(buttonDodge = createhitbox(0, 0x636363, offsetFir, 1280, 180)));
+                hitbox.add(add(buttonLeft = createhitbox(0, 0xFF00FF, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3)));
+                hitbox.add(add(buttonDown = createhitbox(Std.int(FlxG.width / 4), 0x00FFFF, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3)));
+                hitbox.add(add(buttonUp = createhitbox(Std.int(FlxG.width / 4) * 2, 0x00FF00, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3)));
+                hitbox.add(add(buttonRight = createhitbox(Std.int(FlxG.width / 4) * 3, 0xFF0000, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3)));
+                hitbox.add(add(buttonDodge = createhitbox(0, 0x636363, offsetFir, FlxG.width, Std.int(FlxG.height / 4))));
        }
     }
     
@@ -99,7 +97,7 @@ class Hitbox extends FlxSpriteGroup
         	width = FlxG.width / 4;
         }
         if (height == 0) {
-        	height = 720;
+        	height = FlxG.height;
         }
         button.loadGraphic(createHintGraphic(Std.int(width), Std.int(height), color));
 
