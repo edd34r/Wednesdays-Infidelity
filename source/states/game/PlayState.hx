@@ -1171,7 +1171,11 @@ class PlayState extends MusicBeatState
 		moveCameraSection(0);
 
 		grain = new FlxSprite();
-		grain.frames = Paths.getJSONAtlas("optimizedGrain/grain");
+                if (ClientPrefs.optimizedGrain) {
+		        grain.frames = Paths.getJSONAtlas("optimizedGrain/grain");
+                } else {
+                        grain.frames = Paths.getJSONAtlas("grain");
+                }
 		grain.animation.addByPrefix('idle', 'grain', 24, true);
 		CoolUtil.exactSetGraphicSize(grain, FlxG.width + 6, FlxG.height + 6);
 		grain.screenCenter();
