@@ -69,10 +69,11 @@ class ChromaticAberrationShader extends FlxShader
 
 class DistortionEffect extends Effect
 {
-	public var shader:DistortionShader = new DistortionShader();
+	public var shader:DistortionShader;
 
 	public function new(glitchFactor:Float, otherglitch:Float, ?pushUpdate:Bool = true)
 	{
+                shader = new DistortionShader();
 		shader.iTime.value = [0];
 		shader.glitchModifier.value = [glitchFactor];
 		shader.moveScreenFullX.value = [true];
@@ -276,10 +277,11 @@ class DistortionShader extends FlxShader
 
 class VHSEffect extends Effect
 {
-	public var shader:VHSShader = new VHSShader();
+	public var shader:VHSShader;
 
 	public function new()
 	{
+                shader = new VHSShader();
 		shader.iTime.value = [0];
 		shader.noisePercent.value = [0.0];
 		shader.range.value = [0.05];
@@ -486,10 +488,11 @@ class VHSShader extends FlxShader // i HATE shaders xd -lunar https://www.shader
 
 class BloomEffect extends Effect
 {
-	public var shader:BloomShader = new BloomShader();
+	public var shader:BloomShader;
 
 	public function new(?size:Float = 18.0, ?qualitly:Float = 8.0, ?dim:Float = 1.8, ?directions:Float = 16.0)
 	{
+                shader = new BloomShader();
 		shader.Size.value = [size];
 		shader.Quality.value = [qualitly];
 		shader.dim.value = [dim];
