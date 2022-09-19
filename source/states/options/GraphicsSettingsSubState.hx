@@ -45,7 +45,7 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		option.onChange = onChangeAntiAliasing; // Changing onChange is only needed if you want to make a special interaction after it changes the value
 		addOption(option);
 
-                var option:Option = new Option('Shaders', "Check this if you have blackscreen.\nit will use optimized grain sprite then", 'optimizedGrain', 'bool', false);
+                var option:Option = new Option('Optimized Grain', "Check this if you have blackscreen.\nit will use optimized grain sprite then", 'optimizedGrain', 'bool', false);
 		addOption(option);
 
 		var option:Option = new Option('Shaders', "Uncheck this if you don't want any Shaders!", 'shaders', 'bool', true);
