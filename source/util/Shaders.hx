@@ -53,6 +53,8 @@ class ChromaticAberrationShader extends FlxShader
 
 		void main()
 		{
+                        #pragma body
+
 			vec4 base = texture2D(bitmap, openfl_TextureCoordv);
             base.r = offsetColor(rOffset).r;
             base.g = offsetColor(gOffset).g;
@@ -255,6 +257,8 @@ class DistortionShader extends FlxShader
 	
 	void main()
 	{
+                #pragma body
+
 		if (working) {
 			vec2 uv = openfl_TextureCoordv;
 	
@@ -451,6 +455,8 @@ class VHSShader extends FlxShader // i HATE shaders xd -lunar https://www.shader
 
 	void main()
 	{
+                #pragma body
+
 		vec2 uv = openfl_TextureCoordv.xy;   
 
 		for (float i = 0.0; i < 0.71; i += 0.1313)
@@ -527,6 +533,8 @@ class BloomShader extends FlxShader // BLOOM SHADER BY BBPANZU
 
 	void main(void)
 	{ 
+                #pragma body
+
 		vec2 uv = openfl_TextureCoordv.xy ;
 
 		float Pi = 6.28318530718; // Pi*2
@@ -565,6 +573,8 @@ class SpiralSpin extends FlxShader // https://www.shadertoy.com/view/lds3WB
         uniform float speed;
         
         void main() {
+            #pragma body
+
             float aspectRatio = 1.77777777778; // 16/9
             vec2 p = 2.0 * vec2(openfl_TextureCoordv.x * aspectRatio, openfl_TextureCoordv.y) - vec2(aspectRatio, 1.0);
             vec2 uv = 0.4 * p;
