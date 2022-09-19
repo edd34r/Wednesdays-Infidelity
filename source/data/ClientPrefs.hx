@@ -48,6 +48,7 @@ class ClientPrefs
 	public static var mechsInputVariants:Bool = true;
 	public static var gradientHitboxes:Bool = true;
 	public static var hitboxOpacity:Float = 0.3;
+        public static var optimizedGrain:Bool = false;
 
 	// Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx and Controls.hx
 	public static var keyBinds:Map<String, Array<FlxKey>> = [
@@ -121,6 +122,7 @@ class ClientPrefs
 		FlxG.save.data.mechsInputVariants = mechsInputVariants;
 		FlxG.save.data.gradientHitboxes = gradientHitboxes;
 		FlxG.save.data.hitboxOpacity = hitboxOpacity;
+                FlxG.save.data.optimizedGrain = optimizedGrain;
 
 		FlxG.save.flush();
 
@@ -314,6 +316,10 @@ class ClientPrefs
 		{
 			hitboxOpacity = FlxG.save.data.hitboxOpacity;
 		}
+                if (FlxG.save.data.optimizedGrain != null)
+                {
+                        optimizedGrain = FlxG.save.data.optimizedGrain;
+                }
 
 		var save:FlxSave = new FlxSave();
 		save.bind('controls_v2', 'ninjamuffin99');
