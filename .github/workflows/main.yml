@@ -52,7 +52,7 @@ jobs:
           haxelib --quiet install flixel-addons
           haxelib --quiet install flxanimate 1.2.0
           haxelib --quiet install hxp
-          haxelib git linc_luajit https://github.com/sirox228/linc_luajit_backup --quiet
+          haxelib git linc_luajit https://github.com/sirox228/linc_luajit --quiet
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec --quiet
           haxelib git extension-androidtools https://github.com/MAJigsaw77/extension-androidtools.git --quiet
           haxelib list
