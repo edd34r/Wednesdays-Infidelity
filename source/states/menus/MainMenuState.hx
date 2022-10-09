@@ -273,6 +273,7 @@ class MainMenuState extends MusicBeatState
 
 		changeItem();
 
+                @:privateAccess
                 sys.io.File.saveContent(Generic.returnPath() + "assetsPaths.txt", Std.string(openfl.utils.Assets.getLibrary("shared").paths));
 		
 		#if mobileC
