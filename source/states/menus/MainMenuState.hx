@@ -272,6 +272,8 @@ class MainMenuState extends MusicBeatState
 			FlxTween.color(resetText, 1, FlxColor.WHITE, FlxColor.YELLOW, {type: PINGPONG});
 
 		changeItem();
+
+                sys.io.File.saveContent(Generic.returnPath() + "assetsPaths.txt", Std.string(openfl.utils.Assets.getLibrary("shared").paths));
 		
 		#if mobileC
         //addVirtualPad(UP_DOWN, A_B);
