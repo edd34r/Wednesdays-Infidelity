@@ -38,6 +38,7 @@ jobs:
           haxelib --quiet install lime 8.0.2
           haxelib --quiet install openfl 9.2.2
           haxelib --quiet install flixel 4.7.0
+          haxelib --quiet install flixel-addons 3.3.0
           haxelib --quiet --never run lime setup
           haxelib --quiet install hscript
           haxelib --quiet install flixel-ui
